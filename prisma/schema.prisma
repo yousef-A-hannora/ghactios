@@ -1,0 +1,101 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  name         String
+  email        String   @unique
+  password     String
+  role         Roles    @default(USER)
+  creatingDate DateTime @default(now())
+  Orders  Order[] 
+  Revies  Review[]
+  VendorInfo Vendor? //optional 
+}
+
+model Vendor {
+  id           Int      @id @default(autoincrement())
+  userId       Int      @unique
+  storeName    String   @unique
+  description  String?
+  creatingDate DateTime @default(now())
+  pruducts  Product[]
+  user User @relation(fields: [userId],references: [id])
+}
+
+model Product {
+  id          Int    @id @default(autoincrement())
+  name        String 
+  description String
+  price       Float
+  stock       Int 
+  vendorId    Int
+  orderItems OrderItem[]
+  reviews Review[]
+  category ProductCategory[]
+  vendor Vendor @relation(fields: [vendorId],references: [id])
+  @@index([name])
+}
+
+model Order {
+  id         Int        @id @default(autoincrement())
+  userId     Int  
+  user       User       @relation(fields: [userId],references: [id])
+  totalPrice Float
+  status     OrderState @default(PENDING)
+  items OrderItem[]
+}
+
+model Category {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+  products ProductCategory[]
+}
+
+model ProductCategory {
+  categoryId Int
+  productId  Int
+  category Category @relation(fields: [categoryId],references: [id])
+  product Product @relation(fields: [productId],references: [id])
+  @@id([categoryId, productId]) //composite Id
+}
+
+model OrderItem {
+  id        Int   @id @default(autoincrement())
+  orderId   Int
+  productId Int
+  quantity  Int
+  price     Float
+  product Product @relation(fields: [productId],references: [id])
+  order Order @relation(fields: [orderId],references: [id])
+}
+
+model Review {
+  id           Int      @id @default(autoincrement())
+  productId    Int
+  userId Int
+  rating       Int @default(1)
+  comment      String
+  creatingDate DateTime @default(now())
+  user      User @relation(fields: [userId],references: [id])
+  product Product @relation(fields: [productId],references: [id])
+}
+
+enum Roles {
+  USER
+  ADMIN
+  VENDOR
+}
+
+enum OrderState {
+  PENDING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
