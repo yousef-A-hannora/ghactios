@@ -1,20 +1,11 @@
-import nodemailer from 'nodemailer';
+// A simple math utility
+function add(a, b) {
+  return a + b;
+}
 
-const transporter = nodemailer.createTransport({
-  service: 'gmail', // or 'hotmail', 'yahoo', or use SMTP config
-  auth: {
-    user: 'hannorayousef@gmail.com',
-    pass: 'rsma rdpq kdbt yxsm'
-  }
-});
+function multiply(a, b) {
+  return a * b;
+}
 
-export const sendEmail = async (to, subject, html) => {
-  await transporter.sendMail({
-    from: 'hannorayousef@gmail.com',
-    to: "bahgatsaber60@gmail.com",
-    subject:"test",
-    html,
-  });
-};
-
-sendEmail()
+// Export functions so we can test them
+module.exports = { add, multiply };
