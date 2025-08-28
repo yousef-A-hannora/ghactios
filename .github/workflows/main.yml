@@ -11,4 +11,10 @@ jobs:
     steps:
       - name: print welcome message
         run: echo " welcome :) " 
+
+      - name: checkout the code
+        uses: actions/checkout@v5.0.0
+
+      - name: list all files
+        run: ls -la
     
