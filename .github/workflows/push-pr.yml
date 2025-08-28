@@ -17,12 +17,14 @@ jobs:
     steps:
       - name: check npm version
         run: npm -v
-    
-      - name: install required packages
-        run: npm i
+  
     
       - name: checkout code
         uses: actions/checkout@v5.0.0
 
+      - name: install required packages
+        run: npm i
+
+        
       - name: run tests
         run: npm run test

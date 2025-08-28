@@ -7,5 +7,6 @@ function multiply(a, b) {
   return a * b;
 }
 
+
 // Export functions so we can test them
 module.exports = { add, multiply };
